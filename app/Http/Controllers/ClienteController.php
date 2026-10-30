@@ -12,7 +12,9 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::all();
+        //$clientes = Cliente::all();
+        $clientes = Cliente::where('estado', 'activo')->get(['codigo', 'email']);
+
         //return dd($clientes);
         return view('clientes.index', compact('clientes'));
     }
@@ -30,7 +32,18 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'codigo' => 'required|string|max:20|min:3',
+            'nombre' => 'required|string|max:100|min:3',
+            'email' => 'required|string|max:100|min:3',
+            'telefono' => 'required|string|max:20|min:3',
+            'direccion' => 'required',
+
+        ]);
+
+        Cliente::create($validated);
+
+        return redirect()->route('cliente.index')->with('status', 'Cliente registrado correctamente!');
     }
 
     /**
@@ -46,7 +59,7 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        //
+        
     }
 
     /**
@@ -60,8 +73,12 @@ class ClienteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        $cliente = Cliente::findOrFail($id);
+        $cliente->delete();
+
+        return redirect()
+        ->route('clientes.index')->with('status', 'Cliente ha sido elimando correctamente!');
     }
 }
