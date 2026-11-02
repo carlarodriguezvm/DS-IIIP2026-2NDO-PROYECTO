@@ -12,8 +12,8 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        //$clientes = Cliente::all();
-        $clientes = Cliente::where('estado', 'activo')->get(['codigo', 'email']);
+        $clientes = Cliente::all();
+        //$clientes = Cliente::where('estado', 'activo')->get(['codigo', 'email']);
 
         //return dd($clientes);
         return view('clientes.index', compact('clientes'));
