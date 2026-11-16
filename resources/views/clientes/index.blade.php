@@ -1,16 +1,3 @@
-<!-- {{ $clientes }} -->
-<!-- @forelse ($clientes as $cliente)
-{{ $cliente->nombre }}
-    <p> ....</p>
-    {{ $cliente->email }}
-@empty
-    <p>No hay clientes registrados.</p>
-@endforelse -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous">
-</script> -->
-
 <!doctype html>
 <html lang="en">
 
@@ -18,19 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous">
-    </script>
+
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+
 </head>
 
 <body>
 
+{{-- NAV BAR  --}}
     <div class="container-navbar">
         <nav class="navbar sm:navbar-expand bg-1 fg-2">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Store</a>
+                <a class="navbar-brand" href="#">HOME</a>
                 <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer"
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -44,11 +30,13 @@
                     </div>
                     <div class="drawer-body">
                         <div class="nav nav-pills navbar-nav">
-                            <a class="nav-link active" aria-current="page" href="#">Clientes</a>
-                            <a class="nav-link" href="#">Empleados</a>
-                            <a class="nav-link" href="#">Categorias</a>
-                            <a class="nav-link" href="#">Productos</a>
-                            <a class="nav-link" href="#">Pedidos</a>
+                            <a class="nav-link active" aria-current="page"
+                                href="{{ route('cliente.index') }}">Clientes</a>
+                            <a class="nav-link" href="{{ route('empleado.index') }}">Empleados</a>
+                            <a class="nav-link" href="{{ route('bodega.index') }}">Bodegas</a>
+                            <a class="nav-link" href="{{ route('categoria.index') }}">Categorias</a>
+                            <a class="nav-link" href="{{ route('producto.index') }}">Productos</a>
+                            <a class="nav-link" href="{{ route('pedido.index') }}">Pedidos</a>
 
 
                         </div>
@@ -58,17 +46,16 @@
         </nav>
     </div>
 
+{{-- BOTON DE AñADIR Y SU DIALOGO PARA GUARDAR, STORE --}}
+    <div class="container-fluid m-3">
+        <div class="d-flex justify-content-end m-5">
 
-
-    <div class="card">
-        <div class="card-body">
-            <button type="button" class="btn-solid theme-primary" data-bs-toggle="dialog"
-                data-bs-target="#scrollableBodyDialog">
+            <button type="button" class="btn-solid theme-primary rounded-pill" data-bs-toggle="dialog"
+                data-bs-target="#aniadirclienteDialog">
                 Añadir Cliente
             </button>
 
-
-            <dialog class="dialog dialog-scrollable" id="scrollableBodyDialog">
+            <dialog class="dialog dialog-scrollable" id="aniadirclienteDialog">
                 <form action="{{ route('cliente.store') }}" method="POST"
                     class="d-flex flex-column overflow-hidden h-100 m-0">
                     @csrf
@@ -78,9 +65,6 @@
                     </div>
                     <div class="dialog-body">
 
-                        {{-- <form action="{{ route('cliente.store') }}" method="POST">
-        @csrf --}}
-
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Codigo</label>
                             <input type="text" class="form-control" name="codigo" value="{{ old('codigo') }}"
@@ -88,8 +72,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput2" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" value="{{ old('nombre') }}"
-                                id="formGroupExampleInput2" placeholder="John">
+                            <input type="text" class="form-control" name="nombre"
+                                id="nombre" placeholder="John">
 
                             @error('nombre')
                                 <div class="invalid-feedback">
@@ -101,16 +85,16 @@
                         </div>
                         <div class="form-field">
                             <label for="fieldText" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" value="{{ old('email') }}"
-                                id="fieldText" placeholder="name@example.com">
+                            <input type="email" class="form-control" name="email"
+                                id="email" placeholder="name@example.com">
                             <div class="form-text">
                                 Es un correo unico por cliente.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput2" class="form-label">Telefono</label>
-                            <input type="text" class="form-control" name="telefono" value="{{ old('telefono') }}"
-                                id="formGroupExampleInput2" placeholder="+1-234-567-8910">
+                            <input type="text" class="form-control" name="telefono"
+                                id="Telefono" placeholder="+1-234-567-8910">
                         </div>
                         <div class="form-field">
                             <label for="exampleFormControlTextarea1" class="form-label">Direccion</label>
@@ -118,11 +102,6 @@
 
                         </div>
 
-                        {{-- <div class="mb-3">
-                            <label for="formGroupExampleInput2" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado" value="{{ old('estado') }}"
-                                id="formGroupExampleInput2" placeholder="+1-234-567-8910">
-                        </div> --}}
                         <div class="form-text">
 
                             <label for="exampleFormControlTextarea1" class="form-label">Estado</label>
@@ -156,172 +135,184 @@
     </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="container-table">
+{{-- MENSAJE DE EXITO PARA AñADIR--}}
+    @if (session('status'))
+        <div class="alert theme-success m-3" role="alert">
+            <p> {{ session('status') }} </p>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-                @if (session('status'))
-                    <div class="alert theme-success" role="alert">
-                        <p> {{ session('status') }} </p>
-                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
-                    </div>
+{{-- MENSAJE DE ERROR PARA AñADIR --}}
+    @if ($errors->any())
+        <div class="card card-subtle theme-danger m-3">
+            <div class="card-header">
+                ERROR
+            </div>
 
-                    {{-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <img src="..." class="rounded me-2" alt="...">
-                            <strong class="me-auto">Bootstrap</strong>
-                            <small>11 mins ago</small>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            {{ session('status') }}
-                        </div>
-                    </div> --}}
-                @endif
+            <div class="card-body">
+                <h4 class="card-title">Se encontraron los siguientes errores: </h4>
+                <p class="card-text">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                </p>
+                <a href="{{ route('cliente.index') }}" class="btn-solid theme-warning">Entendido</a>
+            </div>
+        </div>
+    @endif
 
-                {{-- TABLAAA --}}
-                <table class="table theme-primary">
+
+{{-- TABLAAA --}}
+        <div class="container-fluid">
+            <div class="border rounded overflow-hidden">
+                <table class="table theme-inverse"">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col">CODIGO</th>
-                            <th scope="col">EMAIL</th>
-                            <th scope="col">TELEFONO</th>
-                            <th scope="col">DIRECCION</th>
-                            <th scope="col">ESTADO</th>
-                            <th scope="col">Acciones</th>
+                            <th class="theme-primary">#</th>
+                            <th class="theme-primary">NOMBRE</th>
+                            <th class="theme-primary">CODIGO</th>
+                            <th class="theme-primary">EMAIL</th>
+                            <th class="theme-primary">TELEFONO</th>
+                            <th class="theme-primary">DIRECCION</th>
+                            <th class="theme-primary">ESTADO</th>
+                            <th class="theme-primary">ACCIONES</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @forelse ($clientes as $cliente)
-                                <th scope="row">{{ $cliente->id }}</th>
-                                <td class="theme-accent">{{ $cliente->nombre }}</td>
+                                <th class=theme-primary>{{ $cliente->id }}</th>
+                                <td>{{ $cliente->nombre }}</td>
                                 <td>{{ $cliente->codigo }}</td>
-                                <td class="theme-accent">{{ $cliente->email }}</td>
+                                <td>{{ $cliente->email }}</td>
                                 <td>{{ $cliente->telefono }}</td>
                                 <td>{{ $cliente->direccion }}</td>
                                 <td>{{ $cliente->estado }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn-solid theme-primary"
-                                            data-bs-toggle="dialog" data-bs-target="#editarclientedialog">
+                                        <button type="button" class="btn-solid theme-primary rounded-pill m-1"
+                                            data-bs-toggle="dialog"
+                                            data-bs-target="#editarclientedialog{{ $cliente->id }}">
                                             Editar
                                         </button>
-                    {{-- MODAL DIALOGO DE EDITAR --}}
-                                        <dialog class="dialog dialog-scrollable" id="editarclientedialog">
-                <form action="{{ route('cliente.store') }}" method="POST"
-                    class="d-flex flex-column overflow-hidden h-100 m-0">
-                    @csrf
-                    <div class="dialog-header" flex-shrink-0>
-                        <h1 class="dialog-title">Añadir Cliente</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Close"></button>
-                    </div>
-                    <div class="dialog-body">
 
-                        {{-- <form action="{{ route('cliente.store') }}" method="POST">
-        @csrf --}}
+                                        {{-- MODAL DIALOGO DE EDITAR ACTUALIZAAR UPDATE --}}
+                                        <dialog class="dialog dialog-scrollable"
+                                            id="editarclientedialog{{ $cliente->id }}">
+                                            <form action="{{ route('cliente.update', $cliente->id) }}" method="POST"
+                                                class="d-flex flex-column overflow-hidden h-100 m-0">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="dialog-header" flex-shrink-0>
+                                                    <h1 class="dialog-title">Añadir Cliente</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="dialog"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="dialog-body">
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Codigo</label>
-                            <input type="text" class="form-control" name="codigo" value="{{ old('codigo') }}"
-                                id="formGroupExampleInput" placeholder="C-1234">
-                        </div>
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput2" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" value="{{ old('nombre') }}"
-                                id="formGroupExampleInput2" placeholder="John">
+                                                    <div class="mb-3">
+                                                        <label for="formGroupExampleInput"
+                                                            class="form-label">Codigo</label>
+                                                        <input type="text" class="form-control" name="codigo"
+                                                            value="{{ old('codigo', $cliente->codigo) }}"
+                                                            id="formGroupExampleInput" placeholder="C-1234">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="formGroupExampleInput2"
+                                                            class="form-label">Nombre</label>
+                                                        <input type="text" class="form-control" name="nombre"
+                                                            value="{{ old('nombre', $cliente->nombre) }}"
+                                                            id="formGroupExampleInput2" placeholder="John">
 
-                            @error('nombre')
-                                <div class="invalid-feedback">
-                                    <p> {{ $message }}
-                                    <p>
-                                </div>
-                            @enderror
+                                                        @error('nombre')
+                                                            <div class="invalid-feedback">
+                                                                <p> {{ $message }}
+                                                                <p>
+                                                            </div>
+                                                        @enderror
 
-                        </div>
-                        <div class="form-field">
-                            <label for="fieldText" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" value="{{ old('email') }}"
-                                id="fieldText" placeholder="name@example.com">
-                            <div class="form-text">
-                                Es un correo unico por cliente.
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput2" class="form-label">Telefono</label>
-                            <input type="text" class="form-control" name="telefono" value="{{ old('telefono') }}"
-                                id="formGroupExampleInput2" placeholder="+1-234-567-8910">
-                        </div>
-                        <div class="form-field">
-                            <label for="exampleFormControlTextarea1" class="form-label">Direccion</label>
-                            <textarea class="form-control" name="direccion" id="exampleFormControlTextarea1">{{ old('direccion') }}</textarea>
+                                                    </div>
+                                                    <div class="form-field">
+                                                        <label for="fieldText" class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                            value="{{ old('email', $cliente->email) }}"
+                                                            id="fieldText" placeholder="name@example.com">
+                                                        <div class="form-text">
+                                                            Es un correo unico por cliente.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="formGroupExampleInput2"
+                                                            class="form-label">Telefono</label>
+                                                        <input type="text" class="form-control" name="telefono"
+                                                            value="{{ old('telefono', $cliente->telefono) }}"
+                                                            id="formGroupExampleInput2" placeholder="+1-234-567-8910">
+                                                    </div>
+                                                    <div class="form-field">
+                                                        <label for="exampleFormControlTextarea1"
+                                                            class="form-label">Direccion</label>
+                                                        <textarea class="form-control" name="direccion" id="exampleFormControlTextarea1">{{ old('direccion', $cliente->direccion) }}</textarea>
 
-                        </div>
+                                                    </div>
 
-                        {{-- <div class="mb-3">
-                            <label for="formGroupExampleInput2" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado" value="{{ old('estado') }}"
-                                id="formGroupExampleInput2" placeholder="+1-234-567-8910">
-                        </div> --}}
-                        <div class="form-text">
+                                                    <div class="form-text">
 
-                            <label for="exampleFormControlTextarea1" class="form-label">Estado</label>
-                            <button class="form-control combobox-toggle" type="button" data-bs-toggle="combobox"
-                                data-bs-name="estado" data-bs-placeholder="Choose a role…">
-                                <span class="combobox-value">Choose a role…</span>
-                                <svg class="combobox-caret" width="10" height="16" viewBox="0 0 10 16"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z"
-                                        fill="currentcolor" />
-                                </svg>
-                            </button>
-                            <div class="menu">
-                                <button class="menu-item selected" type="button" data-bs-value="activo"
-                                    aria-selected="true">Activo</button>
-                                <button class="menu-item" type="button" data-bs-value="inactivo">Inactivo</button>
-                            </div>
-                        </div>
+                                                        <label for="exampleFormControlTextarea1"
+                                                            class="form-label">Estado</label>
+                                                        <button class="form-control combobox-toggle" type="button"
+                                                            data-bs-toggle="combobox" data-bs-name="estado"
+                                                            data-bs-placeholder="Choose a role…">
+                                                            <span class="combobox-value">Choose a role…</span>
+                                                            <svg class="combobox-caret" width="10" height="16"
+                                                                viewBox="0 0 10 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z"
+                                                                    fill="currentcolor" />
+                                                            </svg>
+                                                        </button>
+                                                        <div class="menu">
+                                                            <button class="menu-item selected" type="button"
+                                                                data-bs-value="activo"
+                                                                aria-selected="true">Activo</button>
+                                                            <button class="menu-item" type="button"
+                                                                data-bs-value="inactivo">Inactivo</button>
+                                                        </div>
+                                                    </div>
 
-                        <div class="dialog-footer">
-                            <button type="button" class="btn-solid theme-secondary"
-                                data-bs-dismiss="dialog">Cerrar</button>
-                            <button type="submit" class="btn-solid theme-primary">Guardar Cambios</button>
-                        </div>
-                </form>
-        </div>
-        </form>
-                                        </dialog>
-
-                                        {{-- BOTON ELIMINAR CON FORM --}}
-                                        <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-solid theme-primary">Eliminar</button>
-                                    </form>
+                                                    <div class="dialog-footer">
+                                                        <button type="button" class="btn-solid theme-secondary"
+                                                            data-bs-dismiss="dialog">Cerrar</button>
+                                                        <button type="submit" class="btn-solid theme-primary">Guardar
+                                                            Cambios</button>
+                                                    </div>
+                                            </form>
                                     </div>
-                                </td>
-                        </tr>
-                    @empty
-                        <p>No hay clientes registrados.</p>
-                        @endforelse
+                                    </form>
+                                    </dialog>
 
-                    </tbody>
-                </table>
+                                    {{-- BOTON ELIMINAR CON FORM --}}
+                                    <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="theme-danger btn-solid rounded-pill m-1">Eliminar</button>
+                                    </form>
             </div>
-        </div>
+            </td>
+            </tr>
+        @empty
+            <p>No hay clientes registrados.</p>
+    @endforelse
+
+    </tbody>
+    </table>
     </div>
 
-
-
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous">
-    </script>
 </body>
 
 </html>

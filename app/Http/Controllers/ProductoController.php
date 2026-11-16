@@ -13,9 +13,10 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $productos = Producto::with('categoria')->get();
-        return dd($productos);
-    }
+        $productos = Producto::all();
+        return view('productos\productos.index', compact('productos'));
+    
+        }
 
     /**
      * Show the form for creating a new resource.
@@ -30,7 +31,19 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'categoria_id' => 'required',
+            'codigo' => 'required|string|max:20|unique:productos',
+            'nombre' => 'required|string|max:100',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|numeric',
+            'stock' => 'required|integer',
+            'estado' => 'required',
+        ]);
+
+        Producto::create($validated);
+
+        return redirect()->route('producto.index')->with('status', 'Producto registrado correctamente');
     }
 
     /**
@@ -54,14 +67,29 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        //
+        $validated = $request->validate([
+            'categoria_id' => 'required',
+            'codigo' => 'required|string|max:20',
+            'nombre' => 'required|string|max:100',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|numeric',
+            'stock' => 'required|integer',
+            'estado' => 'required',
+        ]);
+
+        $producto->update($validated);
+
+        return redirect()->route('producto.index')->with('status', 'Producto actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy($id)
     {
-        //
+        $producto = Producto::findOrFail($id);
+        $producto->delete();
+
+        return redirect()->route('producto.index')->with('status', 'Producto eliminado correctamente');
     }
 }

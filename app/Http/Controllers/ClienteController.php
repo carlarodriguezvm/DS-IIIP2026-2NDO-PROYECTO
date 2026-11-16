@@ -12,7 +12,8 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::all();
+        // $clientes = Cliente::all();
+        $clientes = Cliente::withoutTrashed()->get();
         //$clientes = Cliente::where('estado', 'activo')->get(['codigo', 'email']);
 
         //return dd($clientes);
@@ -39,7 +40,15 @@ class ClienteController extends Controller
             'telefono' => 'required|string|max:20|min:3',
             'direccion' => 'required',
 
-        ]);
+        ], [
+                    'codigo.required' => 'El codigo es obligatorio.',
+                    'codigo.max' => 'El codigo tiene un maximo',
+                    'nombre.required' => 'El nombre es obligatorio.',
+                    'email.required' => 'El email es obligatorio.',
+                    'telefono.required' => 'El teléfono es obligatorio.',
+                    'direccion.required' => 'La dirección es obligatoria.'
+                ]
+        );
 
         Cliente::create($validated);
 
@@ -67,7 +76,25 @@ class ClienteController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-        //
+                $validated = $request->validate([
+            'codigo' => 'required|string|max:20|min:3',
+            'nombre' => 'required|string|max:100|min:3',
+            'email' => 'required|string|max:100|min:3',
+            'telefono' => 'required|string|max:20|min:3',
+            'direccion' => 'required',
+                ],[
+                    'codigo.required' => 'El codigo es obligatorio.',
+                    'nombre.required' => 'El nombre es obligatorio.',
+                    'email.required' => 'El email es obligatorio.',
+                    'telefono.required' => 'El teléfono es obligatorio.',
+                    'direccion.required' => 'La dirección es obligatoria.'
+                ]);
+
+                $cliente->update($validated);
+
+                return redirect()
+                    ->route('cliente.index')
+                    ->with('status', 'Cliente actualizado correctamente');
     }
 
     /**
@@ -79,6 +106,6 @@ class ClienteController extends Controller
         $cliente->delete();
 
         return redirect()
-        ->route('clientes.index')->with('status', 'Cliente ha sido elimando correctamente!');
+        ->route('cliente.index')->with('status', 'Cliente ha sido elimando correctamente!');
     }
 }

@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Bodega;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Bodega>
+ */
+class BodegaFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'codigo' => $this->faker->unique()->numerify('B-####'),
+            'nombre' => $this->faker->company(),
+            'descripcion' => $this->faker->sentence(),
+        ];
+    }
+}

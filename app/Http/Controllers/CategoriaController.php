@@ -13,7 +13,7 @@ class CategoriaController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
-        return dd($categorias);
+        return view('categorias.index', compact('categorias'));
     }
 
     /**
@@ -21,7 +21,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+ 
     }
 
     /**
@@ -29,7 +29,19 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'estado' => 'required'
+        ], [
+            'nombre.required' => 'El nombre es obligatorio',
+            'descripcion.required' => 'La descripcion es obligatorio',
+            'estado.required' => 'El estado es required'
+        ]);
+
+        Categoria::create($validated);
+
+        return redirect()->route('categoria.index')->with('status', 'Categoria creada existosamente');
     }
 
     /**
@@ -45,7 +57,7 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
-        //
+
     }
 
     /**
@@ -53,14 +65,29 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, Categoria $categoria)
     {
-        //
+               $validated = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'estado' => 'required'
+        ], [
+            'nombre.required' => 'El nombre es obligatorio',
+            'descripcion.required' => 'La descripcion es obligatorio',
+            'estado.required' => 'El estado es required'
+        ]);
+
+        $categoria->update($validated);
+        return redirect()->route('categoria.index')->with('status', 'Categoria actualizada existosamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categoria $categoria)
+    public function destroy($id)
     {
-        //
+        $categoria = Categoria::findorFail($id);
+        $categoria->delete();
+
+        return redirect()->route('categoria.index')->with('status', 'Categoria eliminada existosamente');
+
     }
 }
